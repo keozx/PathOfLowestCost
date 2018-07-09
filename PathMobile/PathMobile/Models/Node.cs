@@ -11,5 +11,14 @@ namespace PathMobile.Models
         public int V { get; set; }
         public int Weight { get; set; }
     }
-
+    public class NodeData
+    {
+        public int index;
+        public string data;
+        public NodeData(string data, int index)
+        {
+            this.index = index;
+            this.data = data;
+        }
+    }
 }
