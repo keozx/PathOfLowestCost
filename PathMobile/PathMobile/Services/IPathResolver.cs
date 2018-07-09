@@ -7,6 +7,6 @@ namespace PathMobile.Services
 {
     public interface IPathResolver
     {
-        Output Solve(int[,] input);
+        Output FindShortest(int s);
     }
 }
