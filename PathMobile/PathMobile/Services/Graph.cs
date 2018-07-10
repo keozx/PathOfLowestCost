@@ -40,7 +40,7 @@ namespace PathMobile.Services
                 }
             }
 
-            BuildEdges(matrix);
+            //BuildEdges(matrix);
         }
 
         void BuildEdges(int[,] matrix)
@@ -55,37 +55,34 @@ namespace PathMobile.Services
             int shiftY = matrix.GetLength(1);
             for (int x = 0; x < matrix.GetLength(0) - 1; x++)
             {
-                int dy = 0;
                 for (int y = 0; y < matrix.GetLength(1); y++)
                 {
                     px++;
 
-                    if (y - 1 <= 0)
+                    if (x - 1 <= 0)
                     {
-                        dist = matrix[x + 1, shiftY - 1];
+                        dist = matrix[shiftY - 1, x + 1];
                         AddEdge(px, shiftY * (x + 1) + 4, dist);
                     }
                     else
                     {
-                        dist = matrix[x + 1, y - 1];
+                        dist = matrix[y - 1, x + 1];
                         AddEdge(px, shiftY * (x + 1) + 4, dist);
                     }
 
-                    dist = matrix[x + 1, y];
+                    dist = matrix[y, x + 1];
                     AddEdge(px, shiftY * (x + 1) + 2,dist );
 
-                    if (y + 1 >= matrix.GetLength(1) - 1)
+                    if (x + 1 >= matrix.GetLength(0) - 1)
                     {
-                        dist = matrix[x + 1, 0];
+                        dist = matrix[0, x + 1];
                         AddEdge(px, shiftY * (x + 1) + 3, dist);
                     }
                     else
                     {
-                        dist = matrix[x + 1, y + 1];
+                        dist = matrix[y + 1, x + 1];
                         AddEdge(px, shiftY * (x + 1) + 3, dist);
                     }
-
-                    dy++;
                 }
             }
         }
