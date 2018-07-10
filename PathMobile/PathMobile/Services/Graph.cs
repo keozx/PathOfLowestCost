@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using PathMobile.Helpers;
 using PathMobile.Models;
@@ -14,11 +15,9 @@ namespace PathMobile.Services
         private List<NodeData> vertices;
         private int graphSize;
         private int[,] adjMatrix;
-        int firstVertices;
         public Graph(int size, int[,] matrix)
         {
             vertices = new List<NodeData>();
-            firstVertices = matrix.GetLength(1) + 1;
             graphSize = size;
             adjMatrix = new int[graphSize, graphSize];
             for (int i = 0; i < graphSize; i++)
@@ -28,19 +27,23 @@ namespace PathMobile.Services
 
             vertices.Add(new NodeData("    ", -1));//no zero index to be used
 
-            int idx = 0;
             for(int x = 0; x < matrix.GetLength(0); x++)
             {
                 for(int y = 0; y < matrix.GetLength(1); y++)
                 {
-                    vertices.Add(new NodeData($"V({matrix[y,x].ToString()})", y + 1));
+                    var v = new NodeData($"V({matrix[y, x].ToString()})", y + 1);
+                    vertices.Add(v);
+                    if(x == matrix.GetLength(0) - 1)
+                    {
+                        v.IsEnd = true;
+                    }
                 }
             }
         }
 
-        public Output FindShortest(int s)
+        public NodeData FindShortest()
         {
-            throw new NotImplementedException();
+            return vertices.Where(v => v.IsEnd).OrderBy(v => v.Distance).First() ;       
         }
 
         public void RunDijkstra()//runs dijkstras algorithm on the adjacency matrix
@@ -103,18 +106,19 @@ namespace PathMobile.Services
                     }
                     else
                     {
+                        vertices[i-1].Distance = distance[i];
                         Debug.WriteLine("Distance from {0} to {1}: {2}", source, i, distance[i]);
                     }
                 }
                 for (int i = 1; i < graphSize; i++)
                 {
-                    printPath(previous, source, i);
+                    printPath(previous, source, i, vertices[i-1]);
                     Debug.WriteLine(string.Empty);
                 }
                 Debug.WriteLine(string.Empty);
             //}
         }
-        private void printPath(int[] path, int start, int end)
+        private void printPath(int[] path, int start, int end, NodeData node)
         {
             //prints a path, given a start and end, and an array that holds previous 
             //nodes visited
@@ -137,10 +141,12 @@ namespace PathMobile.Services
                 return;
             }
             Debug.Write($"{temp} -> ");//print source
+            node.Path = new List<int>();
             while (s.Count != 0)
             {
                 int v = s.Pop();
                 Debug.Write($"{v} at {vertices[v-1].index} -> ");//print successive nodes to destination
+                node.Path.Add(vertices[v - 1].index);
             }
         }
         public void AddEdge(int vertexA, int vertexB, int distance)

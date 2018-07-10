@@ -15,6 +15,9 @@ namespace PathMobile.Models
     {
         public int index;
         public string data;
+        public int Distance { get; set; }
+        public bool IsEnd { get; set; }
+        public List<int> Path { get; set; }
         public NodeData(string data, int index)
         {
             this.index = index;
