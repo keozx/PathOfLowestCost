@@ -27,9 +27,9 @@ namespace PathMobile.Services
 
             vertices.Add(new NodeData("    ", -1));//no zero index to be used
 
-            for(int x = 0; x < matrix.GetLength(0); x++)
+            for(int x = 0; x < matrix.GetLength(1); x++)
             {
-                for(int y = 0; y < matrix.GetLength(1); y++)
+                for(int y = 0; y < matrix.GetLength(0); y++)
                 {
                     var v = new NodeData($"V({matrix[y, x].ToString()})", y + 1);
                     vertices.Add(v);
@@ -52,10 +52,10 @@ namespace PathMobile.Services
             }
 
             int px = 1;
-            int shiftY = matrix.GetLength(1);
-            for (int x = 0; x < matrix.GetLength(0) - 1; x++)
+            int shiftY = matrix.GetLength(0);
+            for (int x = 0; x < matrix.GetLength(1) - 1; x++)
             {
-                for (int y = 0; y < matrix.GetLength(1); y++)
+                for (int y = 0; y < matrix.GetLength(0); y++)
                 {
                     px++;
 
